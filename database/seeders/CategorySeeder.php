@@ -24,5 +24,17 @@ class CategorySeeder extends Seeder
 
         $category4 = Category::factory()->clothes()->create([]);
         $category4->save();
+
+        Category::create([
+            "id" => 5,
+            "name" => 'Cat Food',
+            "description" => 'Cat Food Category',
+        ]);
+
+        Category::create([
+            "id" => 6,
+            "name" => 'Dog Food',
+            "description" => 'Dog Food Category',
+        ]);
     }
 }
