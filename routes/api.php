@@ -37,3 +37,8 @@ Route::get("/categories-custom-simple", function () {
     $category = App\Models\Category::all();
     return new App\Http\Resources\Custom\CategorySimpleResourceCollection($category);
 });
+
+Route::get('/products/{id}', function ($id) {
+    $product = \App\Models\Product::find($id);
+    return new App\Http\Resources\Product\ProductAllFieldResource($product);
+});

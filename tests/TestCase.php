@@ -15,5 +15,7 @@ abstract class TestCase extends BaseTestCase
 
         DB::delete("DELETE FROM products");
         DB::delete("DELETE FROM categories");
+        DB::statement("ALTER TABLE products AUTO_INCREMENT = 6");
+        DB::statement("ALTER TABLE categories AUTO_INCREMENT = 7");
     }
 }
