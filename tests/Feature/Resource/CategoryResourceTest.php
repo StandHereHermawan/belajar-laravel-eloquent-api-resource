@@ -141,4 +141,48 @@ class CategoryResourceTest extends TestCase
             Log::info(json_encode($category));
         });
     }
+
+    public function testCustomAgainCollectionOfResource(): void
+    {
+        $this->seed([CategorySeeder::class]);
+        $categories = Category::all();
+
+
+        self::get("/api/categories-custom-simple")
+            ->assertStatus(200)
+            ->assertJson([
+                "total" => 6,
+                "data" => [
+                    [
+                        "id" =>         $categories[0]->id,
+                        "name" =>       $categories[0]->name,
+                    ],
+                    [
+                        "id" =>         $categories[1]->id,
+                        "name" =>       $categories[1]->name,
+                    ],
+                    [
+                        "id" =>         $categories[2]->id,
+                        "name" =>       $categories[2]->name,
+                    ],
+                    [
+                        "id" =>         $categories[3]->id,
+                        "name" =>       $categories[3]->name,
+                    ],
+                    [
+                        "id" =>         $categories[4]->id,
+                        "name" =>       $categories[4]->name,
+                    ],
+                    [
+                        "id" =>         $categories[5]->id,
+                        "name" =>       $categories[5]->name,
+                    ],
+                ],
+            ]);
+
+        $categories->each(function ($category) {
+            self::assertNotNull($category,);
+            Log::info(json_encode($category));
+        });
+    }
 }

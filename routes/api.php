@@ -32,3 +32,8 @@ Route::get("/categories-custom", function () {
     $category = App\Models\Category::all();
     return new App\Http\Resources\Custom\CategoryResourceCollection($category);
 });
+
+Route::get("/categories-custom-simple", function () {
+    $category = App\Models\Category::all();
+    return new App\Http\Resources\Custom\CategorySimpleResourceCollection($category);
+});
