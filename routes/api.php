@@ -63,3 +63,26 @@ Route::get('/products-debug-dynamic/{id}', function ($id) {
     $product = \App\Models\Product::find($id);
     return new \App\Http\Resources\Product\ProductDynamicDebugResource($product);
 });
+
+Route::get('/products/conditional/category-loaded/{id}', function ($id) {
+    $product = \App\Models\Product::find($id);
+    $product->load("categories");
+    return new \App\Http\Resources\Product\ProductConditionalAttributesResource($product);
+});
+
+Route::get("/products/conditional/category-loaded", function () {
+    // $products = App\Models\Product::all();
+    // $products->load("categories");
+    $products = App\Models\Product::with("categories")->get();
+    return new App\Http\Resources\Product\Collection\ProductConditionalAttributesResourceCollection($products);
+});
+
+Route::get('/products/conditional/{id}', function ($id) {
+    $product = \App\Models\Product::find($id);
+    return new \App\Http\Resources\Product\ProductConditionalAttributesResource($product);
+});
+
+Route::get("/products/conditional", function () {
+    $products = App\Models\Product::all();
+    return new App\Http\Resources\Product\Collection\ProductConditionalAttributesResourceCollection($products);
+});

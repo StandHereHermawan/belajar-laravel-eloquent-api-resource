@@ -113,4 +113,49 @@ class UnitTest extends TestCase
         Log::debug(json_encode($response->json()));
         Log::debug(json_encode($response->status()));
     }
+
+    public function testConditionalAttributes(): void
+    {
+        self::seed([CategorySeeder::class, ProductSeeder::class, ProductSeederAgain::class]);
+
+        $product = Product::first();
+        self::assertNotNull($product);
+        Log::debug(json_encode($product));
+
+        $response = $this->get("/api/products/conditional/category-loaded/$product->id")
+            ->assertStatus(200)
+            ->assertJson([
+                "value" => [
+                    "name" => $product->name,
+                    "categories" => [
+                        "id" => $product->categories->id,
+                        "name" => $product->categories->name,
+                    ],
+                    "price" => $product->price,
+                    "is_expensive" => $product->price > 1000000,
+                    "created_at" => $product->created_at->toJSON(),
+                    "updated_at" => $product->updated_at->toJSON(),
+                ],
+            ]);
+
+        self::assertNotNull($response);
+        Log::debug(json_encode($response));
+        Log::debug(json_encode($response->json()));
+
+        $response = $this->get("/api/products/conditional/$product->id")
+            ->assertStatus(200)
+            ->assertJson([
+                "value" => [
+                    "name" => $product->name,
+                    "price" => $product->price,
+                    "is_expensive" => $product->price > 1000000,
+                    "created_at" => $product->created_at->toJSON(),
+                    "updated_at" => $product->updated_at->toJSON(),
+                ],
+            ]);
+
+        self::assertNotNull($response);
+        Log::debug(json_encode($response));
+        Log::debug(json_encode($response->json()));
+    }
 }
