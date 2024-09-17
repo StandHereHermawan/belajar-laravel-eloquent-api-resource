@@ -67,7 +67,9 @@ Route::get('/products-debug-dynamic/{id}', function ($id) {
 Route::get('/products/conditional/category-loaded/{id}', function ($id) {
     $product = \App\Models\Product::find($id);
     $product->load("categories");
-    return new \App\Http\Resources\Product\ProductConditionalAttributesResource($product);
+    return (new \App\Http\Resources\Product\ProductConditionalAttributesResource($product))
+        ->response()
+        ->header("X-Powered-By", "Arief Karditya Hermawan");
 });
 
 Route::get("/products/conditional/category-loaded", function () {

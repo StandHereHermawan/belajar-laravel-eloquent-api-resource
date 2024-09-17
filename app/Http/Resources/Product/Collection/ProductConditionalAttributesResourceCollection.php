@@ -25,4 +25,9 @@ class ProductConditionalAttributesResourceCollection extends ResourceCollection
             "data" => ProductConditionalAttributesResource::collection($this->collection),
         ];
     }
+
+    public function withResponse(Request $request, \Illuminate\Http\JsonResponse $response): void
+    {
+        $response->header('X-Powered-By', 'Arief Karditya Hermawan');
+    }
 }
