@@ -51,9 +51,21 @@ class UnitTest extends TestCase
         for ($i = 1; $i <= 5; $i++) {
             self::assertContains("Product $i of Food", $names);
         }
-        
+
         for ($i = 1; $i <= 5; $i++) {
             self::assertContains("Product $i of Gadget", $names);
         }
+    }
+
+    public function testProductsPaging(): void
+    {
+        self::seed([CategorySeeder::class, ProductSeeder::class, ProductSeederAgain::class]);
+
+        $response = $this->get('/api/products-paging')
+            ->assertStatus(200);
+
+            self::assertNotNull($response->json("links"), );
+            self::assertNotNull($response->json("meta"), );
+            self::assertNotNull($response->json("data"), );
     }
 }
