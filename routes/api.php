@@ -53,3 +53,13 @@ Route::get('/products-paging', function (Request $request) {
     $products = \App\Models\Product::paginate(perPage: 2, page: $page);
     return new App\Http\Resources\Product\Collection\ProductResourceCollection($products);
 });
+
+Route::get('/products-debug/{id}', function ($id) {
+    $product = \App\Models\Product::find($id);
+    return new \App\Http\Resources\Product\ProductDebugResource($product);
+});
+
+Route::get('/products-debug-dynamic/{id}', function ($id) {
+    $product = \App\Models\Product::find($id);
+    return new \App\Http\Resources\Product\ProductDynamicDebugResource($product);
+});

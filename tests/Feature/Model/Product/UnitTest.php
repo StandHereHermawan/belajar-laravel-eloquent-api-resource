@@ -64,8 +64,53 @@ class UnitTest extends TestCase
         $response = $this->get('/api/products-paging')
             ->assertStatus(200);
 
-            self::assertNotNull($response->json("links"), );
-            self::assertNotNull($response->json("meta"), );
-            self::assertNotNull($response->json("data"), );
+        self::assertNotNull($response->json("links"),);
+        self::assertNotNull($response->json("meta"),);
+        self::assertNotNull($response->json("data"),);
+    }
+
+    public function testAdditionalMetadata(): void
+    {
+        self::seed([CategorySeeder::class, ProductSeeder::class, ProductSeederAgain::class]);
+        $product = Product::first();
+
+        self::assertNotNull($product);
+        $this->get("/api/products-debug/$product->id")
+            ->assertStatus(200)
+            ->assertJson([
+                "author" => "Arief Karditya Hermawan",
+                "data" => [
+                    "id" => $product->id,
+                    "name" => $product->name,
+                    "price" => $product->price,
+                ],
+            ]);
+        Log::debug(json_encode($product));
+    }
+
+    public function testAdditionalDynamicParameter(): void
+    {
+        self::seed([CategorySeeder::class, ProductSeeder::class, ProductSeederAgain::class]);
+        $product = Product::first();
+        self::assertNotNull($product);
+
+        $response = $this->get("/api/products-debug-dynamic/$product->id")
+            ->assertStatus(200)
+            ->assertJson([
+                "author" => "Arief Karditya Hermawan",
+                "data" => [
+                    "id" => $product->id,
+                    "name" => $product->name,
+                    "price" => $product->price,
+                ],
+            ]);
+
+        self::assertNotNull($response);
+        self::assertNotNull($response->json("server_time"));
+
+        Log::debug(json_encode($product));
+        Log::debug(json_encode($response));
+        Log::debug(json_encode($response->json()));
+        Log::debug(json_encode($response->status()));
     }
 }
