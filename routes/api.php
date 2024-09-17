@@ -42,3 +42,8 @@ Route::get('/products/{id}', function ($id) {
     $product = \App\Models\Product::find($id);
     return new App\Http\Resources\Product\ProductAllFieldResource($product);
 });
+
+Route::get("/products", function () {
+    $products = App\Models\Product::all();
+    return new App\Http\Resources\Product\Collection\ProductResourceCollection($products);
+});

@@ -18,7 +18,7 @@ class UnitTest extends TestCase
      */
     public function testProduct(): void
     {
-        self::seed([CategorySeeder::class, ProductSeeder::class ,ProductSeederAgain::class]);
+        self::seed([CategorySeeder::class, ProductSeeder::class, ProductSeederAgain::class]);
         $product = Product::first();
 
         self::assertNotNull($product);
@@ -38,5 +38,22 @@ class UnitTest extends TestCase
                     "updated_at" => $product->updated_at->toJSON(),
                 ],
             ]);
+    }
+
+    public function testCollectionOfProduct(): void
+    {
+        self::seed([CategorySeeder::class, ProductSeeder::class, ProductSeederAgain::class]);
+        $response = $this->get("/api/products")
+            ->assertStatus(200);
+
+        $names = $response->json("data.*.name");
+
+        for ($i = 1; $i <= 5; $i++) {
+            self::assertContains("Product $i of Food", $names);
+        }
+        
+        for ($i = 1; $i <= 5; $i++) {
+            self::assertContains("Product $i of Gadget", $names);
+        }
     }
 }
